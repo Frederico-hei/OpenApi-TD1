@@ -1,17 +1,17 @@
 openapi: 3.0.0
 info:
-  title: STD23088 - TD1
+  title: STD23032 - TD1
   version: 1.0.0
 
 servers:
-  - url: https://localhost.STD23088.com
+  - url: https://localhost.STD23032.com
 
 paths:
   /customers:
     get:
       responses:
         '200':
-          description: A list of customers
+          description:list of customers
           content:
             application/json:
               schema:
