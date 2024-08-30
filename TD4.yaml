@@ -1,0 +1,156 @@
+openapi: 3.0.3
+info:
+  title: STD23000 - TD4
+  version: '1.0.4'
+servers:
+  - url: https://localhost.std23032.com
+paths:
+  /customers/{customerId}/orders:
+    get:
+      summary: Récupérer la liste des commandes d'un client
+      parameters:
+        - in: path
+          name: customerId
+          schema:
+            type: string
+          required: true
+          description: L'identifiant unique du client
+      responses:
+        200:
+          description: Liste des commandes du client
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Commande'
+    post:
+      summary: Ajouter une nouvelle commande pour un client
+      parameters:
+        - in: path
+          name: customerId
+          schema:
+            type: string
+          required: true
+          description: L'identifiant unique du client
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  description: Le numéro de commande unique
+                meals:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      mealId:
+                        type: string
+                        description: L'identifiant unique du plat
+                      quantity:
+                        type: integer
+                        description: La quantité commandée
+            required:
+              - reference
+              - meals
+        required: true
+      responses:
+        200:
+          description: Commande créée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Commande'
+    put:
+      summary: Mettre à jour une commande existante d'un client
+      parameters:
+        - in: path
+          name: customerId
+          schema:
+            type: string
+          required: true
+          description: L'identifiant unique du client
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reference:
+                  type: string
+                  description: Le numéro de commande unique
+                meals:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      mealId:
+                        type: string
+                        description: L'identifiant unique du plat
+                      quantity:
+                        type: integer
+                        description: La quantité commandée
+            required:
+              - reference
+              - meals
+        required: true
+      responses:
+        200:
+          description: Commande mise à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Commande'
+components:
+  schemas:
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant unique du client
+        name:
+          type: string
+          description: Nom du client
+        age:
+          type: integer
+          description: Âge du client
+    Meal:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant unique du plat
+        nom:
+          type: string
+          description: Nom du plat
+        prix:
+          type: number
+          format: float
+          description: Prix du plat
+    Commande:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Identifiant unique de la commande
+        reference:
+          type: string
+          description: Référence de la commande
+        meals:
+          type: array
+          items:
+            type: object
+            properties:
+              meal:
+                $ref: '#/components/schemas/Meal'
+              quantity:
+                type: integer
+                description: Quantité commandée
+        orderDatetime:
+          type: string
+          format: date-time
+          description: Date et heure de la commande
